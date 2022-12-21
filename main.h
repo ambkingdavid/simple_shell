@@ -44,6 +44,7 @@ char **split_args(char *line, int *argc);
 void execute(char **argv, int argc);
 void exec_builtin(char **argv, int argc);
 int check_cmd(char *cmd, struct stat *st);
+int check_builtin(char **argv);
 
 
 

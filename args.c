@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * get_args - gets the arguments from stdin
+ * @line: buffer to store the args
+ *
+ * Return: number of bytes read
+ */
+
 ssize_t get_args(char **line)
 {
 	char *prompt;
@@ -17,6 +24,14 @@ ssize_t get_args(char **line)
 
 	return (read);
 }
+
+/**
+ * split_args -splits the args into tokens
+ * @line: the buffer that stores the args
+ * @argc: the number of arguments
+ *
+ * Return: the address to the tokens
+ */
 
 char **split_args(char *line, int *argc)
 {
@@ -43,6 +58,15 @@ char **split_args(char *line, int *argc)
 	return (tokens);
 }
 
+/**
+ * check_cmd - checks if a command is valid
+ * @cmd: the command
+ * @st: a struct stat
+ *
+ * Return: 0 if the command exits
+ *         1 if the command does not exit or not executable
+ */
+
 int check_cmd(char *cmd, struct stat *st)
 {
 	int result;
@@ -53,10 +77,7 @@ int check_cmd(char *cmd, struct stat *st)
 	{
 		if (st->st_mode & S_IXUSR)
 			return (0);
-		else
-		{
-			return (1);
-		}
+		return (1);
 	}
 	else
 	{

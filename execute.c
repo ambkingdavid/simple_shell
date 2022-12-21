@@ -1,59 +1,26 @@
 #include "main.h"
 
-/**
- * check_builtin - checks if a command is a built in
- * @cmd: the command.
- *
- * Return: 0 if a command is a builtin
- *         1 if a command is not a builtin.
- */
-
-int check_builtin(char *cmd)
-{
-	int i;
-
-	char *builtin[] = {"exit", NULL};
-
-	i = 0;
-
-	while (builtin[i] != NULL)
-	{
-		if (strcmp(cmd, builtin[i]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-/**
- * execute - executes the command
- * @argv: array that stores the command and args
- * @argc: number of args
- */
-
-
-void execute(char **argv, int argc)
-{
-	pid_t pid;
-
-	if (check_builtin(argv[0]) == 0)
-	{
-		get_builtin(argv[0])(argv, argc);
-	}
-	else
-	{
-
-		pid = fork();
-
-
-		if (pid < 0)
-			perror("Error");
-		else if (pid > 0)
-			wait(NULL);
-		else
-		{
-			execvp(argv[0], argv);
-			exit(0);
-		}
-	}
+void execute_command(char *command, char **arguments, char **environment) {
+  if (strcmp(command, "cd") == 0) {
+    // Built-in command, handle it directly
+    // ...
+  } else {
+    // Command is not a built-in, try to execute it as an external program
+    pid_t child_pid = fork();
+    if (child_pid == 0) {
+      // This is the child process, execute the program
+      execve(command, arguments, environment);
+      // If execve returns, it means an error occurred
+      perror("execve");
+      exit(1);
+    } else if (child_pid > 0) {
+      // This is the parent process, wait for the child to finish
+      int child_status;
+      waitpid(child_pid, &child_status, 0);
+    } else {
+      // Fork failed
+      perror("fork");
+      exit(1);
+    }
+  }
 }

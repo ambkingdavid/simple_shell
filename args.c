@@ -69,18 +69,26 @@ char **split_args(char *line, int *argc)
 
 int check_cmd(char *cmd, struct stat *st)
 {
-	int result;
+	int result_exe, result_cmd;
 
-	result = stat(cmd, st);
+	result_exe = stat(cmd, st);
+	result_cmd = check_builtin(cmd);
 
-	if (result == 0)
+	if (result_cmd == 0)
+	{
+		return (0);
+	}
+	if (result_exe == 0)
 	{
 		if (st->st_mode & S_IXUSR)
 			return (0);
+		perror(cmd);
 		return (1);
 	}
 	else
 	{
+		perror(cmd);
 		return (1);
 	}
+	return (1);
 }

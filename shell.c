@@ -21,7 +21,8 @@ int main(int ac, char *av[])
 	{
 		get_args(&line);
 		argv = split_args(line, &argc);
-		check_cmd(argv[0], &st);
+		if (check_cmd(argv[0], &st) != 0)
+			continue;
 		execute(argv, argc);
 	}
 

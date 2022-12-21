@@ -2,23 +2,23 @@
 
 /**
  * check_builtin - checks if a command is a built in
- * @argv: the array that holds the command.
+ * @cmd: the command.
  *
  * Return: 0 if a command is a builtin
  *         1 if a command is not a builtin.
  */
 
-int check_builtin(char **argv)
+int check_builtin(char *cmd)
 {
 	int i;
 
-	char *builtin[] = {"exit", "cd", "env", NULL};
+	char *builtin[] = {"exit", NULL};
 
 	i = 0;
 
-	while (builtin[i])
+	while (builtin[i] != NULL)
 	{
-		if (argv[0] == builtin[i])
+		if (strcmp(cmd, builtin[i]) == 0)
 			return (0);
 		i++;
 	}
@@ -36,7 +36,7 @@ void execute(char **argv, int argc)
 {
 	pid_t pid;
 
-	if (check_builtin(argv) == 0)
+	if (check_builtin(argv[0]) == 0)
 	{
 		get_builtin(argv[0])(argv, argc);
 	}
